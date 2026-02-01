@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapa de Proyectos Turísticos</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1f7a63;
+      --bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --shadow: 0 10px 25px rgba(0,0,0,0.15);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /* =======================
+       BARRA SUPERIOR LOGOS
+    ======================= */
+    #top-logos {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      background: #ffffff;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      padding: 0 40px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    #top-logos img {
+      max-height: 80px;
+      object-fit: contain;
+    }
+
+    /* =======================
+       MAPA
+    ======================= */
+    #map {
+      height: calc(100% - 90px);
+      width: 100%;
+      margin-top: 90px;
+    }
+
+    /* =======================
+       PANEL DE FILTROS
+    ======================= */
+    #filtros {
+      position: absolute;
+      top: 110px; /* debajo de la barra */
+      left: 16px;
+      width: 260px;
+      background: var(--bg);
+      padding: 16px;
+      z-index: 1100;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    #filtros h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    #filtros strong {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    #filtros label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+
+    #filtros input[type="checkbox"] {
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    #filtros select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      font-size: 14px;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+
+    /* =======================
+       POPUP (CARD)
+    ======================= */
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 0;
+    }
+
+    .popup-card {
+      max-width: 340px;
+    }
+
+    .popup-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .popup-content {
+      padding: 12px 14px 14px;
+    }
+
+    .popup-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .popup-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .popup-meta b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .popup-desc {
+      font-size: 14px;
+      color: var(--text);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- BARRA SUPERIOR DE LOGOS -->
+<div id="top-logos">
+  <img src="https://raw.githubusercontent.com/1993otros/map/main/mincit.png" alt="MinCIT">
+  <img src="https://raw.githubusercontent.com/1993otros/map/main/fontur.png" alt="Fontur">
+  <img src="https://raw.githubusercontent.com/1993otros/map/main/innpulsa.png" alt="iNNpulsa">
+  <img src="https://raw.githubusercontent.com/1993otros/map/main/empretur.png" alt="Empretur">
+</div>
+
+<!-- FILTROS -->
+<div id="filtros">
+  <h3>Proyectos turísticos</h3>
+
+  <strong>Tipo</strong>
+  <label><input type="checkbox" value="Comunitario" checked> Comunitario</label>
+  <label><input type="checkbox" value="Naturaleza" checked> Naturaleza</label>
+  <label><input type="checkbox" value="Sostenibilidad" checked> Sostenibilidad</label>
+  <label><input type="checkbox" value="Competitividad" checked> Competitividad</label>
+
+  <strong>Departamento</strong>
+  <select id="filtroDepartamento">
+    <option value="TODOS">Todos</option>
+  </select>
+
+  <strong>Municipio</strong>
+  <select id="filtroMunicipio">
+    <option value="TODOS">Todos</option>
+  </select>
+</div>
+
+<!-- MAPA -->
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+  var map = L.map('map').setView([4.6, -74.1], 6);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  var iconos = {
+    "Comunitario": L.icon({
+      iconUrl: "https://raw.githubusercontent.com/1993otros/map/main/Turismo%20comunitario.png",
+      iconSize: [20,20],
+      iconAnchor: [2,20],
+      popupAnchor: [0,-20]
+    }),
+    "Naturaleza": L.icon({
+      iconUrl: "https://cdn-icons-png.flaticon.com/512/427/427735.png",
+      iconSize: [30,30]
+    }),
+    "Sostenibilidad": L.icon({
+      iconUrl: "https://cdn-icons-png.flaticon.com/512/2917/2917990.png",
+      iconSize: [30,30]
+    }),
+    "Competitividad": L.icon({
+      iconUrl: "https://cdn-icons-png.flaticon.com/512/235/235861.png",
+      iconSize: [30,30]
+    })
+  };
+
+  var marcadores = [];
+  var departamentos = {};
+
+  const sheetURL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT48cx5M4uRcoEhSzJhQDvD2SWP-jxPsNeDNYb4EDUvfm4HJGEsVe2Kibzu2EzEkCj-9zIgc2FvI3rP/pub?output=csv";
+
+  Papa.parse(sheetURL, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+
+      results.data.forEach(row => {
+        const lat = parseFloat(row.lat);
+        const lng = parseFloat(row.lng);
+        if (isNaN(lat) || isNaN(lng)) return;
+
+        const m = L.marker([lat, lng], {
+          icon: iconos[row.tipo] || L.Icon.Default.prototype
+        });
+
+        m.tipo = row.tipo;
+        m.departamento = row.departamento;
+        m.municipio = row.municipio;
+
+        if (!departamentos[row.departamento]) {
+          departamentos[row.departamento] = new Set();
+        }
+        departamentos[row.departamento].add(row.municipio);
+
+        const img = row.imagen ? `<img src="${row.imagen}">` : "";
+
+        m.bindPopup(`
+          <div class="popup-card">
+            ${img}
+            <div class="popup-content">
+              <div class="popup-title">${row.nombre}</div>
+              <div class="popup-meta"><b>Tipo:</b> ${row.tipo}</div>
+              <div class="popup-meta"><b>Departamento:</b> ${row.departamento}</div>
+              <div class="popup-meta"><b>Municipio:</b> ${row.municipio}</div>
+              <div class="popup-desc">${row.descripcion}</div>
+            </div>
+          </div>
+        `);
+
+        m.addTo(map);
+        marcadores.push(m);
+      });
+
+      const selDep = document.getElementById("filtroDepartamento");
+      Object.keys(departamentos).sort().forEach(dep => {
+        selDep.innerHTML += `<option value="${dep}">${dep}</option>`;
+      });
+    }
+  });
+
+  function actualizarMunicipios(dep) {
+    const sel = document.getElementById("filtroMunicipio");
+    sel.innerHTML = `<option value="TODOS">Todos</option>`;
+    if (dep !== "TODOS" && departamentos[dep]) {
+      Array.from(departamentos[dep]).sort().forEach(m =>
+        sel.innerHTML += `<option value="${m}">${m}</option>`
+      );
+    }
+  }
+
+  function aplicarFiltros() {
+    const tipos = Array.from(
+      document.querySelectorAll('#filtros input[type="checkbox"]:checked')
+    ).map(cb => cb.value);
+
+    const dep = document.getElementById("filtroDepartamento").value;
+    const mun = document.getElementById("filtroMunicipio").value;
+
+    let visibles = [];
+
+    marcadores.forEach(m => {
+      const ok =
+        tipos.includes(m.tipo) &&
+        (dep === "TODOS" || m.departamento === dep) &&
+        (mun === "TODOS" || m.municipio === mun);
+
+      if (ok) {
+        map.addLayer(m);
+        visibles.push(m);
+      } else {
+        map.removeLayer(m);
+      }
+    });
+
+    if (visibles.length > 0) {
+      map.flyToBounds(L.featureGroup(visibles).getBounds(), {
+        padding: [40, 40],
+        duration: 0.8
+      });
+    }
+
+    if (dep === "TODOS" && mun === "TODOS") {
+      map.flyTo([4.6, -74.1], 6);
+    }
+  }
+
+  document.getElementById("filtroDepartamento").addEventListener("change", e => {
+    actualizarMunicipios(e.target.value);
+    aplicarFiltros();
+  });
+
+  document.getElementById("filtroMunicipio").addEventListener("change", aplicarFiltros);
+
+  document
+    .querySelectorAll('#filtros input[type="checkbox"]')
+    .forEach(cb => cb.addEventListener('change', aplicarFiltros));
+</script>
+
+</body>
+</html>
