@@ -5,14 +5,11 @@
 <script>
 const map = L.map('map').setView([4.6, -74.1], 6);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap'
-}).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-let allData = [];
 let heatLayer;
+let allData = [];
 let departamentos = {};
-let categoriasPST = new Set();
 
 const sheetURL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vT48cx5M4uRcoEhSzJhQDvD2SWP-jxPsNeDNYb4EDUvfm4HJGEsVe2Kibzu2EzEkCj-9zIgc2FvI3rP/pub?output=csv";
@@ -34,18 +31,10 @@ Papa.parse(sheetURL, {
         departamentos[row.departamento] = new Set();
 
       departamentos[row.departamento].add(row.municipio);
-
-      if (row.categoria_pst)
-        categoriasPST.add(row.categoria_pst);
     });
 
-    // llenar selects
     Object.keys(departamentos).sort().forEach(dep =>
       filtroDepartamento.innerHTML += `<option value="${dep}">${dep}</option>`
-    );
-
-    Array.from(categoriasPST).sort().forEach(c =>
-      filtroCategoriaPST.innerHTML += `<option value="${c}">${c}</option>`
     );
 
     aplicarFiltros();
@@ -61,58 +50,22 @@ function actualizarMunicipios(dep) {
   }
 }
 
-function actualizarContador(visibles) {
-  const total = allData.length;
-
-  const conteo = {
-    "Turismo Comunitario": 0,
-    "Sostenibilidad para Mipymes": 0,
-    "Fábricas de Competitividad": 0,
-    "Aglomeraciones de Turismo": 0
-  };
-
-  visibles.forEach(row => {
-    if (conteo[row.tipo] !== undefined)
-      conteo[row.tipo]++;
-  });
-
-  document.getElementById("contador").innerHTML = `
-    <div>Mostrando <b>${visibles.length}</b> de <b>${total}</b> proyectos</div>
-    <div style="margin-top:6px;font-size:13px;text-align:left">
-      • Turismo Comunitario: ${conteo["Turismo Comunitario"]}<br>
-      • Sostenibilidad para Mipymes: ${conteo["Sostenibilidad para Mipymes"]}<br>
-      • Fábricas de Competitividad: ${conteo["Fábricas de Competitividad"]}<br>
-      • Aglomeraciones de Turismo: ${conteo["Aglomeraciones de Turismo"]}
-    </div>
-  `;
-}
-
 function aplicarFiltros() {
 
-  const tipos = Array.from(document.querySelectorAll('#filtros input[type="checkbox"]:checked')).map(cb => cb.value);
-  const cat = filtroCategoriaPST.value;
   const dep = filtroDepartamento.value;
   const mun = filtroMunicipio.value;
-  const texto = buscadorNombre.value.toLowerCase().trim();
 
-  let visibles = [];
   let puntos = [];
 
   allData.forEach(row => {
-
     const lat = parseFloat(row.lat);
     const lng = parseFloat(row.lng);
     if (isNaN(lat) || isNaN(lng)) return;
 
-    const ok =
-      tipos.includes(row.tipo) &&
-      (cat === "TODAS" || row.categoria_pst === cat) &&
+    if (
       (dep === "TODOS" || row.departamento === dep) &&
-      (mun === "TODOS" || row.municipio === mun) &&
-      (texto === "" || (row.nombre || "").toLowerCase().includes(texto));
-
-    if (ok) {
-      visibles.push(row);
+      (mun === "TODOS" || row.municipio === mun)
+    ) {
       puntos.push([lat, lng, 0.7]);
     }
   });
@@ -121,23 +74,15 @@ function aplicarFiltros() {
     heatLayer.setLatLngs(puntos);
   } else {
     heatLayer = L.heatLayer(puntos, {
-      radius: 28,
-      blur: 22,
-      maxZoom: 12,
-      gradient: {
-        0.2: '#00f',
-        0.4: '#0ff',
-        0.6: '#0f0',
-        0.8: '#ff0',
-        1.0: '#f00'
-      }
+      radius: 30,
+      blur: 25,
+      maxZoom: 12
     }).addTo(map);
   }
 
-  actualizarContador(visibles);
-
-  if (puntos.length > 0)
-    map.flyToBounds(L.latLngBounds(puntos), { padding: [40,40], duration: 0.8 });
+  if (puntos.length > 0) {
+    map.flyToBounds(L.latLngBounds(puntos), { padding: [40,40] });
+  }
 }
 
 filtroDepartamento.addEventListener("change", e => {
@@ -146,20 +91,4 @@ filtroDepartamento.addEventListener("change", e => {
 });
 
 filtroMunicipio.addEventListener("change", aplicarFiltros);
-filtroCategoriaPST.addEventListener("change", aplicarFiltros);
-buscadorNombre.addEventListener("input", aplicarFiltros);
-
-document.querySelectorAll('#filtros input[type="checkbox"]').forEach(cb =>
-  cb.addEventListener("change", aplicarFiltros)
-);
-
-btnLimpiar.addEventListener("click", () => {
-  buscadorNombre.value = "";
-  document.querySelectorAll('#filtros input[type="checkbox"]').forEach(cb => cb.checked = true);
-  filtroCategoriaPST.value = "TODAS";
-  filtroDepartamento.value = "TODOS";
-  filtroMunicipio.value = "TODOS";
-  aplicarFiltros();
-  map.flyTo([4.6, -74.1], 6);
-});
 </script>
