@@ -161,18 +161,19 @@ visibles++;
 });
 
 if(heatLayer){
-heatLayer.setLatLngs(puntos);
-}else{
-heatLayer=L.heatLayer(puntos,{
-radius:28,
-blur:22,
-maxZoom:12,
-gradient:{
-0.2:'#1f7a63',
-0.5:'#22c55e',
-0.8:'#facc15',
-1:'#ef4444'
-}
+heatLayer = L.heatLayer(puntos, {
+  radius: 40,      // MÁS GRANDE
+  blur: 15,        // MENOS DIFUSO
+  maxZoom: 14,
+  max: 1.0,        // fuerza total
+  minOpacity: 0.6, // más visible desde lejos
+  gradient: {
+    0.1: '#0f766e',
+    0.3: '#22c55e',
+    0.5: '#facc15',
+    0.7: '#f97316',
+    1.0: '#dc2626'
+  }
 }).addTo(map);
 }
 
