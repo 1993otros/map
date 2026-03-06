@@ -87,7 +87,7 @@ html,body{height:100%;margin:0}
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
-const map = L.map('map').setView([4.6,-74.1],6);
+const map=L.map('map').setView([4.6,-74.1],6);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 let heatLayer;
@@ -102,25 +102,25 @@ header:true,
 skipEmptyLines:true,
 complete:function(results){
 
-  allData=results.data;
+allData=results.data;
 
-  allData.forEach(row=>{
-    const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
-    const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
-    const dep=row.departamento||row.DEPARTAMENTO||row.Departamento;
-    const mun=row.municipio||row.MUNICIPIO||row.Municipio;
+allData.forEach(row=>{
+const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
+const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
+const dep=row.departamento||row.DEPARTAMENTO||row.Departamento;
+const mun=row.municipio||row.MUNICIPIO||row.Municipio;
 
-    if(isNaN(lat)||isNaN(lng)) return;
+if(isNaN(lat)||isNaN(lng)) return;
 
-    if(!departamentos[dep]) departamentos[dep]=new Set();
-    departamentos[dep].add(mun);
-  });
+if(!departamentos[dep]) departamentos[dep]=new Set();
+departamentos[dep].add(mun);
+});
 
-  Object.keys(departamentos).sort().forEach(dep=>{
-    filtroDepartamento.innerHTML+=`<option value="${dep}">${dep}</option>`;
-  });
+Object.keys(departamentos).sort().forEach(dep=>{
+filtroDepartamento.innerHTML+=`<option value="${dep}">${dep}</option>`;
+});
 
-  aplicarFiltros();
+aplicarFiltros();
 }
 });
 
@@ -135,70 +135,85 @@ filtroMunicipio.innerHTML+=`<option value="${m}">${m}</option>`;
 
 function aplicarFiltros(){
 
-  const dep=filtroDepartamento.value;
-  const mun=filtroMunicipio.value;
-  const texto=buscadorNombre.value.toLowerCase().trim();
+const dep=filtroDepartamento.value;
+const mun=filtroMunicipio.value;
+const texto=buscadorNombre.value.toLowerCase().trim();
 
-  let acumulador = {};
-  let visibles = 0;
+let acumulador={};
+let visibles=0;
 
-  allData.forEach(row=>{
-    const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
-    const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
-    const departamento=row.departamento||row.DEPARTAMENTO||row.Departamento;
-    const municipio=row.municipio||row.MUNICIPIO||row.Municipio;
-    const nombre=(row.nombre||row.NOMBRE||"").toLowerCase();
+allData.forEach(row=>{
+const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
+const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
+const departamento=row.departamento||row.DEPARTAMENTO||row.Departamento;
+const municipio=row.municipio||row.MUNICIPIO||row.Municipio;
+const nombre=(row.nombre||row.NOMBRE||"").toLowerCase();
 
-    if(isNaN(lat)||isNaN(lng)) return;
+if(isNaN(lat)||isNaN(lng)) return;
 
-    if(
-      (dep==="TODOS"||departamento===dep)&&
-      (mun==="TODOS"||municipio===mun)&&
-      (texto===""||nombre.includes(texto))
-    ){
+if(
+(dep==="TODOS"||departamento===dep)&&
+(mun==="TODOS"||municipio===mun)&&
+(texto===""||nombre.includes(texto))
+){
 
-      const key = lat + "," + lng;
+const key=lat+","+lng;
 
-      if(!acumulador[key]){
-        acumulador[key] = {lat:lat, lng:lng, count:0};
-      }
-
-      acumulador[key].count++;
-      visibles++;
-    }
-  });
-
-  let puntos = [];
-
-  Object.values(acumulador).forEach(p=>{
-    puntos.push([p.lat, p.lng, p.count]); // 🔥 AQUÍ ESTÁ LA MAGIA
-  });
-
-  if(heatLayer){
-    heatLayer.setLatLngs(puntos);
-  }else{
-    heatLayer=L.heatLayer(puntos,{
-      radius:45,
-      blur:12,
-      maxZoom:15,
-      max:10,        // 🔥 PERMITE MÁS INTENSIDAD
-      minOpacity:0.5,
-      gradient:{
-        0.1:'#065f46',
-        0.3:'#16a34a',
-        0.5:'#facc15',
-        0.7:'#f97316',
-        1:'#dc2626'
-      }
-    }).addTo(map);
-  }
-
-  document.getElementById("contador").innerHTML=
-  `Mostrando <b>${visibles}</b> proyectos`;
-
-  if(puntos.length>0)
-    map.flyToBounds(L.latLngBounds(puntos),{padding:[40,40]});
+if(!acumulador[key]){
+acumulador[key]={lat:lat,lng:lng,count:0};
 }
+
+acumulador[key].count++;
+visibles++;
+}
+});
+
+let puntos=[];
+Object.values(acumulador).forEach(p=>{
+puntos.push([p.lat,p.lng,p.count]);
+});
+
+if(heatLayer){
+heatLayer.setLatLngs(puntos);
+}else{
+heatLayer=L.heatLayer(puntos,{
+radius:50,
+blur:10,
+maxZoom:15,
+max:5,
+minOpacity:0.7,
+gradient:{
+0.1:'#065f46',
+0.3:'#16a34a',
+0.5:'#facc15',
+0.7:'#f97316',
+1:'#dc2626'
+}
+}).addTo(map);
+}
+
+document.getElementById("contador").innerHTML=
+`Mostrando <b>${visibles}</b> proyectos`;
+
+if(puntos.length>0)
+map.flyToBounds(L.latLngBounds(puntos),{padding:[40,40]});
+}
+
+filtroDepartamento.addEventListener("change",e=>{
+actualizarMunicipios(e.target.value);
+aplicarFiltros();
+});
+
+filtroMunicipio.addEventListener("change",aplicarFiltros);
+buscadorNombre.addEventListener("input",aplicarFiltros);
+
+btnLimpiar.addEventListener("click",()=>{
+buscadorNombre.value="";
+filtroDepartamento.value="TODOS";
+filtroMunicipio.value="TODOS";
+aplicarFiltros();
+map.flyTo([4.6,-74.1],6);
+});
 </script>
 
 </body>
