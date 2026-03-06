@@ -134,71 +134,71 @@ filtroMunicipio.innerHTML+=`<option value="${m}">${m}</option>`;
 }
 
 function aplicarFiltros(){
-const dep=filtroDepartamento.value;
-const mun=filtroMunicipio.value;
-const texto=buscadorNombre.value.toLowerCase().trim();
 
-let puntos=[];
-let visibles=0;
+  const dep=filtroDepartamento.value;
+  const mun=filtroMunicipio.value;
+  const texto=buscadorNombre.value.toLowerCase().trim();
 
-allData.forEach(row=>{
-const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
-const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
-const departamento=row.departamento||row.DEPARTAMENTO||row.Departamento;
-const municipio=row.municipio||row.MUNICIPIO||row.Municipio;
-const nombre=(row.nombre||row.NOMBRE||"").toLowerCase();
+  let acumulador = {};
+  let visibles = 0;
 
-if(isNaN(lat)||isNaN(lng)) return;
+  allData.forEach(row=>{
+    const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
+    const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
+    const departamento=row.departamento||row.DEPARTAMENTO||row.Departamento;
+    const municipio=row.municipio||row.MUNICIPIO||row.Municipio;
+    const nombre=(row.nombre||row.NOMBRE||"").toLowerCase();
 
-if(
-(dep==="TODOS"||departamento===dep)&&
-(mun==="TODOS"||municipio===mun)&&
-(texto===""||nombre.includes(texto))
-){
-puntos.push([lat,lng,1.2]);
-visibles++;
-}
-});
+    if(isNaN(lat)||isNaN(lng)) return;
 
-if(heatLayer){
-heatLayer = L.heatLayer(puntos, {
-  radius: 40,      // MÁS GRANDE
-  blur: 15,        // MENOS DIFUSO
-  maxZoom: 14,
-  max: 1.0,        // fuerza total
-  minOpacity: 0.6, // más visible desde lejos
-  gradient: {
-    0.1: '#0f766e',
-    0.3: '#22c55e',
-    0.5: '#facc15',
-    0.7: '#f97316',
-    1.0: '#dc2626'
+    if(
+      (dep==="TODOS"||departamento===dep)&&
+      (mun==="TODOS"||municipio===mun)&&
+      (texto===""||nombre.includes(texto))
+    ){
+
+      const key = lat + "," + lng;
+
+      if(!acumulador[key]){
+        acumulador[key] = {lat:lat, lng:lng, count:0};
+      }
+
+      acumulador[key].count++;
+      visibles++;
+    }
+  });
+
+  let puntos = [];
+
+  Object.values(acumulador).forEach(p=>{
+    puntos.push([p.lat, p.lng, p.count]); // 🔥 AQUÍ ESTÁ LA MAGIA
+  });
+
+  if(heatLayer){
+    heatLayer.setLatLngs(puntos);
+  }else{
+    heatLayer=L.heatLayer(puntos,{
+      radius:45,
+      blur:12,
+      maxZoom:15,
+      max:10,        // 🔥 PERMITE MÁS INTENSIDAD
+      minOpacity:0.5,
+      gradient:{
+        0.1:'#065f46',
+        0.3:'#16a34a',
+        0.5:'#facc15',
+        0.7:'#f97316',
+        1:'#dc2626'
+      }
+    }).addTo(map);
   }
-}).addTo(map);
+
+  document.getElementById("contador").innerHTML=
+  `Mostrando <b>${visibles}</b> proyectos`;
+
+  if(puntos.length>0)
+    map.flyToBounds(L.latLngBounds(puntos),{padding:[40,40]});
 }
-
-document.getElementById("contador").innerHTML=
-`Mostrando <b>${visibles}</b> proyectos`;
-
-if(puntos.length>0)
-map.flyToBounds(L.latLngBounds(puntos),{padding:[40,40]});
-}
-
-filtroDepartamento.addEventListener("change",e=>{
-actualizarMunicipios(e.target.value);
-aplicarFiltros();
-});
-
-filtroMunicipio.addEventListener("change",aplicarFiltros);
-buscadorNombre.addEventListener("input",aplicarFiltros);
-
-btnLimpiar.addEventListener("click",()=>{
-buscadorNombre.value="";
-filtroDepartamento.value="TODOS";
-filtroMunicipio.value="TODOS";
-aplicarFiltros();
-map.flyTo([4.6,-74.1],6);
-});
 </script>
 
 </body>
