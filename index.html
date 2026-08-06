@@ -1,220 +1,332 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<title>Mapa de Proyectos Turísticos</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<title>Caracterización de Beneficiarios · Turismo +PRO</title>
 <style>
-:root {
-  --primary:#1f7a63;
-  --bg:#ffffff;
-  --text:#1f2937;
-  --muted:#6b7280;
-  --shadow:0 10px 25px rgba(0,0,0,0.15);
-  --radius:12px;
-}
-*{box-sizing:border-box;font-family:'Inter',sans-serif}
-html,body{height:100%;margin:0}
+  :root{
+    --blue:#3B7BC4;
+    --purple:#8E2D6E;
+    --orange:#F0913B;
+    --yellow:#F4D23A;
+    --green:#8DC63F;
+    --pink:#E0518C;
+    --bg:#FDF6F8;
+    --ink:#3A2E3B;
+    --muted:#8B7C8B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Nunito','Segoe UI',sans-serif;
+    background:
+      radial-gradient(circle at 8% 12%, rgba(240,145,59,0.10) 0, transparent 40%),
+      radial-gradient(circle at 95% 8%, rgba(59,123,196,0.08) 0, transparent 45%),
+      radial-gradient(circle at 90% 90%, rgba(142,45,110,0.07) 0, transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    padding:36px 28px 60px;
+  }
+  .wrap{max-width:1140px;margin:0 auto;}
 
-/* LOGOS */
-#top-logos{
-  position:fixed;top:0;left:0;width:100%;height:90px;
-  background:#fff;z-index:1200;
-  display:flex;align-items:center;justify-content:center;
-  gap:60px;box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
-#top-logos img{max-height:80px}
+  /* HERO */
+  .hero{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;margin-bottom:30px;flex-wrap:wrap;
+  }
+  .hero-title{font-size:2.5rem;line-height:1.05;font-weight:900;margin:0;}
+  .hero-title .t1{color:var(--blue);}
+  .hero-title .t2{color:var(--purple);}
+  .hero-sub{margin-top:6px;font-size:1.02rem;color:var(--muted);font-weight:700;letter-spacing:.5px;}
+  .hero-dots{display:flex;gap:6px;align-items:flex-end;margin-bottom:8px;}
+  .dot{border-radius:50%;}
+  .badge-total{
+    background:linear-gradient(135deg,var(--purple),var(--blue));
+    color:#fff;border-radius:20px;padding:16px 26px;text-align:center;
+    box-shadow:0 10px 24px rgba(142,45,110,0.25);
+  }
+  .badge-total .num{font-size:2.4rem;font-weight:900;display:block;line-height:1;}
+  .badge-total .lbl{font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.9;}
 
-/* MAPA */
-#map{height:calc(100% - 90px);margin-top:90px}
+  /* QUICK STATS STRIP */
+  .stats-strip{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:38px;
+  }
+  .stat-pill{
+    background:#fff;border-radius:16px;padding:16px 14px;text-align:center;
+    box-shadow:0 4px 14px rgba(142,45,110,0.07);border-bottom:4px solid var(--c);
+  }
+  .stat-pill .num{font-size:1.5rem;font-weight:900;color:var(--c);}
+  .stat-pill .lbl{font-size:.72rem;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.2;}
 
-/* FILTROS */
-#filtros{
-  position:absolute;top:110px;left:16px;width:300px;
-  background:#fff;padding:16px;z-index:1100;
-  border-radius:12px;box-shadow:var(--shadow);
-}
-#filtros h3{margin:0 0 10px;color:var(--primary)}
-#contador{
-  background:#f0fdf9;border:1px solid #ccfbf1;
-  color:var(--primary);font-size:14px;
-  font-weight:600;padding:8px;border-radius:10px;
-  margin-bottom:10px;text-align:center;
-}
-#filtros select,#buscadorNombre{
-  width:100%;padding:8px;border-radius:8px;
-  border:1px solid #e5e7eb;margin-bottom:6px;
-}
-#btnLimpiar{
-  width:100%;padding:8px;border-radius:8px;
-  border:1px solid #fecaca;background:#fef2f2;
-  color:#b91c1c;font-weight:600;cursor:pointer;
-  margin-bottom:10px;
-}
+  .section-title{
+    font-size:1.25rem;font-weight:900;color:var(--purple);
+    margin:0 0 4px;display:flex;align-items:center;gap:10px;
+  }
+  .section-title .plus{color:var(--green);font-weight:900;}
+  .section-sub{color:var(--muted);font-size:.86rem;font-weight:600;margin-bottom:16px;}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:26px;}
+
+  .panel{
+    background:#fff;border-radius:20px;padding:24px 26px 18px;
+    box-shadow:0 6px 24px rgba(142,45,110,0.08);margin-bottom:26px;
+  }
+
+  /* DONUT via conic-gradient */
+  .donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;}
+  .donut{
+    width:150px;height:150px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .donut-hole{
+    width:88px;height:88px;background:#fff;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .donut-hole .n{font-weight:900;font-size:1.15rem;color:var(--ink);}
+  .donut-hole .s{font-size:.62rem;color:var(--muted);font-weight:700;}
+  .legend{display:flex;flex-direction:column;gap:8px;}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;}
+  .legend-dot{width:12px;height:12px;border-radius:4px;flex-shrink:0;}
+  .legend-val{color:var(--muted);font-weight:700;margin-left:auto;padding-left:14px;}
+
+  /* BARS */
+  .bar-row{display:grid;grid-template-columns:200px 1fr 70px;align-items:center;gap:12px;margin-bottom:11px;}
+  .bar-row .label{font-size:.82rem;font-weight:800;text-align:right;}
+  .bar-track{background:#f4ecf0;border-radius:8px;height:20px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:8px;animation:grow 1s ease-out;}
+  @keyframes grow{from{width:0;}}
+  .bar-val{font-weight:900;font-size:.8rem;}
+
+  /* Diversity checklist */
+  .diversity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .div-card{
+    background:#fdf6f8;border-radius:14px;padding:16px;text-align:center;
+    border:2px solid #f4ecf0;
+  }
+  .div-card .icon{font-size:1.5rem;}
+  .div-card .num{font-size:1.5rem;font-weight:900;color:var(--purple);margin-top:4px;}
+  .div-card .lbl{font-size:.74rem;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.25;}
+
+  .footnote{text-align:center;color:var(--muted);font-size:.78rem;font-weight:700;margin-top:10px;}
+
+  .divider{
+    display:flex;justify-content:center;align-items:center;gap:10px;margin:6px 0 26px;
+    color:var(--purple);opacity:.5;font-size:.78rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  }
+  .divider:before,.divider:after{content:'';flex:1;height:2px;
+    background:linear-gradient(90deg,transparent,var(--orange),transparent);max-width:160px;}
+
+  @media(max-width:900px){
+    .grid-2{grid-template-columns:1fr;}
+    .stats-strip{grid-template-columns:repeat(2,1fr);}
+    .diversity-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:600px){
+    .bar-row{grid-template-columns:110px 1fr 40px;}
+    .bar-row .label{font-size:.68rem;}
+    .hero-title{font-size:1.7rem;}
+  }
 </style>
 </head>
-
 <body>
+<div class="wrap">
 
-<div id="top-logos">
-<img src="https://raw.githubusercontent.com/1993otros/map/main/mincit.png">
-<img src="https://raw.githubusercontent.com/1993otros/map/main/fontur.png">
-<img src="https://raw.githubusercontent.com/1993otros/map/main/innpulsa.png">
-<img src="https://raw.githubusercontent.com/1993otros/map/main/empretur.png">
+  <div class="hero">
+    <div>
+      <div class="hero-dots" id="dots"></div>
+      <h1 class="hero-title"><span class="t1">Caracterización de</span> <span class="t2">Beneficiarios</span></h1>
+      <div class="hero-sub">TURISMO +PRO &nbsp;·&nbsp; CRECER PARA AVANZAR</div>
+    </div>
+    <div class="badge-total">
+      <span class="num">500</span>
+      <span class="lbl">Beneficiarios<br>seleccionados</span>
+    </div>
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="stats-strip">
+    <div class="stat-pill" style="--c:var(--pink)"><div class="num">53.4%</div><div class="lbl">Son mujeres</div></div>
+    <div class="stat-pill" style="--c:var(--blue)"><div class="num">80.2%</div><div class="lbl">Microempresas</div></div>
+    <div class="stat-pill" style="--c:var(--orange)"><div class="num">61%</div><div class="lbl">En etapa de crecimiento</div></div>
+    <div class="stat-pill" style="--c:var(--green)"><div class="num">45.6</div><div class="lbl">Años, edad promedio</div></div>
+    <div class="stat-pill" style="--c:var(--purple)"><div class="num">83.8%</div><div class="lbl">Con registro mercantil</div></div>
+  </div>
+
+  <!-- SEXO + TIPO PERSONA -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Sexo biológico</div>
+      <div class="section-sub">Distribución de los 500 beneficiarios</div>
+      <div class="donut-wrap">
+        <div class="donut" style="background:conic-gradient(var(--pink) 0% 53.4%, var(--blue) 53.4% 100%)">
+          <div class="donut-hole"><div class="n">500</div><div class="s">total</div></div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--pink)"></span>Mujer <span class="legend-val">267 · 53.4%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Hombre <span class="legend-val">233 · 46.6%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Tipo de persona</div>
+      <div class="section-sub">Naturaleza jurídica del beneficiario</div>
+      <div class="donut-wrap">
+        <div class="donut" style="background:conic-gradient(var(--purple) 0% 80.2%, var(--yellow) 80.2% 100%)">
+          <div class="donut-hole"><div class="n">500</div><div class="s">total</div></div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span>Persona natural <span class="legend-val">401 · 80.2%</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Persona jurídica <span class="legend-val">99 · 19.8%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDAD + TAMAÑO EMPRESA -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Rango de edad</div>
+      <div class="section-sub">Edad promedio: 46.4 años</div>
+      <div id="edad"></div>
+    </div>
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Tamaño de empresa</div>
+      <div class="section-sub">Clasificación de la unidad productiva</div>
+      <div id="tamano"></div>
+    </div>
+  </div>
+
+  <div class="divider">Ubicación y formación</div>
+
+  <!-- DEPARTAMENTO -->
+  <div class="panel">
+    <div class="section-title"><span class="plus">+</span> Departamento de residencia</div>
+    <div class="section-sub">Número de beneficiarios por departamento</div>
+    <div id="depto"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Nivel de escolaridad</div>
+      <div class="section-sub">Máximo nivel educativo alcanzado</div>
+      <div id="escolaridad"></div>
+    </div>
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Etapa de madurez</div>
+      <div class="section-sub">Momento del emprendimiento</div>
+      <div id="madurez"></div>
+    </div>
+  </div>
+
+  <div class="divider">Formalización</div>
+
+  <div class="panel">
+    <div class="section-title"><span class="plus">+</span> Nivel de formalización empresarial</div>
+    <div class="section-sub">Porcentaje de beneficiarios que cuentan con cada requisito</div>
+    <div id="formal"></div>
+  </div>
+
+  <div class="divider">Enfoque diferencial y poblaciones diversas</div>
+
+  <div class="panel">
+    <div class="section-title"><span class="plus">+</span> Poblaciones de especial protección</div>
+    <div class="section-sub">Número de beneficiarios que se autoreconocen en cada grupo (no excluyentes entre sí)</div>
+    <div class="diversity-grid">
+      <div class="div-card"><div class="icon">🌎</div><div class="num">57</div><div class="lbl">Pertenecen a un grupo étnico</div></div>
+      <div class="div-card"><div class="icon">🎗️</div><div class="num">83</div><div class="lbl">Población vulnerable</div></div>
+      <div class="div-card"><div class="icon">🕊️</div><div class="num">25</div><div class="lbl">Víctimas del conflicto (RUV)</div></div>
+      <div class="div-card"><div class="icon">👵</div><div class="num">82</div><div class="lbl">Personas adultas mayores (60+)</div></div>
+      <div class="div-card"><div class="icon">🌱</div><div class="num">31</div><div class="lbl">Jóvenes (14 a 28 años)</div></div>
+      <div class="div-card"><div class="icon">♿</div><div class="num">14</div><div class="lbl">Con alguna condición de discapacidad</div></div>
+      <div class="div-card"><div class="icon">🏳️‍🌈</div><div class="num">9</div><div class="lbl">Sectores sociales LGBTIQ+</div></div>
+      <div class="div-card"><div class="icon">✈️</div><div class="num">5</div><div class="lbl">Personas migrantes</div></div>
+      <div class="div-card"><div class="icon">🤝</div><div class="num">96</div><div class="lbl">Realizan trabajo de cuidado</div></div>
+    </div>
+    <div class="footnote">Fuente: Base de beneficiarios seleccionados · Turismo +PRO · n = 500</div>
+  </div>
+
 </div>
-
-<div id="filtros">
-<h3>Proyectos turísticos</h3>
-<div id="contador">Cargando proyectos…</div>
-
-<input type="text" id="buscadorNombre" placeholder="Buscar proyecto…">
-<button id="btnLimpiar">Limpiar filtros</button>
-
-<strong>Departamento</strong>
-<select id="filtroDepartamento"><option value="TODOS">Todos</option></select>
-
-<strong>Municipio</strong>
-<select id="filtroMunicipio"><option value="TODOS">Todos</option></select>
-</div>
-
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
-<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
-const map=L.map('map').setView([4.6,-74.1],6);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+const colorSeq = ['var(--blue)','var(--purple)','var(--orange)','var(--yellow)','var(--green)','var(--pink)','#B98FA6'];
 
-let heatLayer;
-let allData=[];
-let departamentos={};
-
-const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vT48cx5M4uRcoEhSzJhQDvD2SWP-jxPsNeDNYb4EDUvfm4HJGEsVe2Kibzu2EzEkCj-9zIgc2FvI3rP/pub?output=csv";
-
-Papa.parse(sheetURL,{
-download:true,
-header:true,
-skipEmptyLines:true,
-complete:function(results){
-
-allData=results.data;
-
-allData.forEach(row=>{
-const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
-const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
-const dep=row.departamento||row.DEPARTAMENTO||row.Departamento;
-const mun=row.municipio||row.MUNICIPIO||row.Municipio;
-
-if(isNaN(lat)||isNaN(lng)) return;
-
-if(!departamentos[dep]) departamentos[dep]=new Set();
-departamentos[dep].add(mun);
-});
-
-Object.keys(departamentos).sort().forEach(dep=>{
-filtroDepartamento.innerHTML+=`<option value="${dep}">${dep}</option>`;
-});
-
-aplicarFiltros();
-}
-});
-
-function actualizarMunicipios(dep){
-filtroMunicipio.innerHTML=`<option value="TODOS">Todos</option>`;
-if(dep!=="TODOS" && departamentos[dep]){
-Array.from(departamentos[dep]).sort().forEach(m=>{
-filtroMunicipio.innerHTML+=`<option value="${m}">${m}</option>`;
-});
-}
+function renderBars(containerId, data, labelWidth){
+  const max = Math.max(...data.map(d=>d.val));
+  const el = document.getElementById(containerId);
+  data.forEach((d,i)=>{
+    const pct = (d.val/max*100).toFixed(1);
+    const row = document.createElement('div');
+    row.className='bar-row';
+    row.innerHTML = `
+      <div class="label">${d.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.color||colorSeq[i%colorSeq.length]}"></div></div>
+      <div class="bar-val">${d.val}${d.suffix||''}</div>
+    `;
+    el.appendChild(row);
+  });
 }
 
-function aplicarFiltros(){
+renderBars('edad', [
+  {name:'46 – 60 años', val:170, suffix:''},
+  {name:'36 – 45 años', val:146},
+  {name:'29 – 35 años', val:86},
+  {name:'60+ años', val:73},
+  {name:'18 – 28 años', val:25},
+]);
 
-const dep=filtroDepartamento.value;
-const mun=filtroMunicipio.value;
-const texto=buscadorNombre.value.toLowerCase().trim();
+renderBars('tamano', [
+  {name:'Microempresa', val:401},
+  {name:'Pequeña empresa', val:91},
+  {name:'Mediana empresa', val:8},
+]);
 
-let acumulador={};
-let visibles=0;
+renderBars('depto', [
+  {name:'Santander', val:150},
+  {name:'Boyacá', val:111},
+  {name:'Chocó', val:61},
+  {name:'Norte de Santander', val:61},
+  {name:'Cauca', val:60},
+  {name:'Arauca', val:33},
+  {name:'Arch. San Andrés', val:24},
+]);
 
-allData.forEach(row=>{
-const lat=parseFloat(row.lat||row.LAT||row.Lat||row.LATITUD||row.latitud);
-const lng=parseFloat(row.lng||row.LNG||row.Lng||row.LONGITUD||row.longitud);
-const departamento=row.departamento||row.DEPARTAMENTO||row.Departamento;
-const municipio=row.municipio||row.MUNICIPIO||row.Municipio;
-const nombre=(row.nombre||row.NOMBRE||"").toLowerCase();
+renderBars('escolaridad', [
+  {name:'Profesional', val:172},
+  {name:'Tecnólogo', val:93},
+  {name:'Bachillerato', val:72},
+  {name:'Técnico', val:70},
+  {name:'Posgrado', val:64},
+  {name:'Primaria', val:22},
+  {name:'Ninguno', val:7},
+]);
 
-if(isNaN(lat)||isNaN(lng)) return;
+renderBars('madurez', [
+  {name:'Crecimiento', val:305},
+  {name:'Temprana', val:148},
+  {name:'Validación', val:34},
+  {name:'Expansión', val:13},
+]);
 
-if(
-(dep==="TODOS"||departamento===dep)&&
-(mun==="TODOS"||municipio===mun)&&
-(texto===""||nombre.includes(texto))
-){
+renderBars('formal', [
+  {name:'Tienen RUT', val:496, suffix:' (99.2%)'},
+  {name:'Registro Mercantil', val:419, suffix:' (83.8%)'},
+  {name:'Página web', val:138, suffix:' (27.6%)'},
+]);
 
-const key=lat+","+lng;
-
-if(!acumulador[key]){
-acumulador[key]={lat:lat,lng:lng,count:0};
-}
-
-acumulador[key].count++;
-visibles++;
-}
-});
-
-let puntos=[];
-Object.values(acumulador).forEach(p=>{
-puntos.push([p.lat,p.lng,p.count]);
-});
-
-if(heatLayer){
-heatLayer.setLatLngs(puntos);
-}else{
-heatLayer=L.heatLayer(puntos,{
-radius:50,
-blur:10,
-maxZoom:15,
-max:5,
-minOpacity:0.7,
-gradient:{
-0.1:'#065f46',
-0.3:'#16a34a',
-0.5:'#facc15',
-0.7:'#f97316',
-1:'#dc2626'
-}
-}).addTo(map);
-}
-
-document.getElementById("contador").innerHTML=
-`Mostrando <b>${visibles}</b> proyectos`;
-
-if(puntos.length>0)
-map.flyToBounds(L.latLngBounds(puntos),{padding:[40,40]});
-}
-
-filtroDepartamento.addEventListener("change",e=>{
-actualizarMunicipios(e.target.value);
-aplicarFiltros();
-});
-
-filtroMunicipio.addEventListener("change",aplicarFiltros);
-buscadorNombre.addEventListener("input",aplicarFiltros);
-
-btnLimpiar.addEventListener("click",()=>{
-buscadorNombre.value="";
-filtroDepartamento.value="TODOS";
-filtroMunicipio.value="TODOS";
-aplicarFiltros();
-map.flyTo([4.6,-74.1],6);
+// decorative dots like the logo
+const dotsEl = document.getElementById('dots');
+const dotColors = ['#F0913B','#F0913B','#F4D23A','#E0518C','#F0913B','#8DC63F'];
+const sizes = [10,16,8,22,12,18];
+sizes.forEach((s,i)=>{
+  const dot = document.createElement('div');
+  dot.className='dot';
+  dot.style.width=s+'px';
+  dot.style.height=s+'px';
+  dot.style.background=dotColors[i%dotColors.length];
+  dotsEl.appendChild(dot);
 });
 </script>
-
 </body>
 </html>
