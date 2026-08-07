@@ -1,3 +1,6 @@
+
+
+Caracterizacion completa · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,118 +23,148 @@
     margin:0;
     font-family:'Nunito','Segoe UI',sans-serif;
     background:
-      radial-gradient(circle at 8% 12%, rgba(240,145,59,0.10) 0, transparent 40%),
-      radial-gradient(circle at 95% 8%, rgba(59,123,196,0.08) 0, transparent 45%),
-      radial-gradient(circle at 90% 90%, rgba(142,45,110,0.07) 0, transparent 45%),
+      radial-gradient(circle at 8% 8%, rgba(240,145,59,0.10) 0, transparent 40%),
+      radial-gradient(circle at 96% 6%, rgba(59,123,196,0.08) 0, transparent 45%),
+      radial-gradient(circle at 92% 60%, rgba(142,45,110,0.06) 0, transparent 45%),
+      radial-gradient(circle at 4% 90%, rgba(141,198,63,0.08) 0, transparent 40%),
       var(--bg);
     color:var(--ink);
     padding:36px 28px 60px;
   }
-  .wrap{max-width:1140px;margin:0 auto;}
-
+  .wrap{max-width:1120px;margin:0 auto;}
+ 
   /* HERO */
   .hero{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:24px;margin-bottom:30px;flex-wrap:wrap;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
   }
   .hero-title{font-size:2.5rem;line-height:1.05;font-weight:900;margin:0;}
   .hero-title .t1{color:var(--blue);}
   .hero-title .t2{color:var(--purple);}
-  .hero-sub{margin-top:6px;font-size:1.02rem;color:var(--muted);font-weight:700;letter-spacing:.5px;}
+  .hero-sub{margin-top:6px;font-size:1rem;color:var(--muted);font-weight:700;letter-spacing:.5px;}
   .hero-dots{display:flex;gap:6px;align-items:flex-end;margin-bottom:8px;}
   .dot{border-radius:50%;}
+ 
   .badge-total{
     background:linear-gradient(135deg,var(--purple),var(--blue));
     color:#fff;border-radius:20px;padding:16px 26px;text-align:center;
     box-shadow:0 10px 24px rgba(142,45,110,0.25);
   }
-  .badge-total .num{font-size:2.4rem;font-weight:900;display:block;line-height:1;}
+  .badge-total .num{font-size:2.3rem;font-weight:900;display:block;line-height:1;}
   .badge-total .lbl{font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.9;}
-
-  /* QUICK STATS STRIP */
-  .stats-strip{
-    display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:38px;
+ 
+  /* KPI STRIP */
+  .kpi-strip{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+    margin-bottom:34px;
   }
-  .stat-pill{
-    background:#fff;border-radius:16px;padding:16px 14px;text-align:center;
-    box-shadow:0 4px 14px rgba(142,45,110,0.07);border-bottom:4px solid var(--c);
+  .kpi{
+    background:#fff;
+    border-radius:16px;
+    padding:16px 14px;
+    text-align:center;
+    box-shadow:0 4px 16px rgba(142,45,110,0.07);
+    border-bottom:4px solid var(--c);
   }
-  .stat-pill .num{font-size:1.5rem;font-weight:900;color:var(--c);}
-  .stat-pill .lbl{font-size:.72rem;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.2;}
-
+  .kpi .kval{font-size:1.55rem;font-weight:900;color:var(--c);}
+  .kpi .klbl{font-size:.72rem;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.2;}
+ 
+  /* SECTION TITLES */
   .section-title{
     font-size:1.25rem;font-weight:900;color:var(--purple);
     margin:0 0 4px;display:flex;align-items:center;gap:10px;
   }
   .section-title .plus{color:var(--green);font-weight:900;}
   .section-sub{color:var(--muted);font-size:.86rem;font-weight:600;margin-bottom:16px;}
-
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:26px;}
-
+ 
   .panel{
     background:#fff;border-radius:20px;padding:24px 26px 18px;
     box-shadow:0 6px 24px rgba(142,45,110,0.08);margin-bottom:26px;
   }
-
-  /* DONUT via conic-gradient */
-  .donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;}
-  .donut{
-    width:150px;height:150px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  }
-  .donut-hole{
-    width:88px;height:88px;background:#fff;border-radius:50%;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-  }
-  .donut-hole .n{font-weight:900;font-size:1.15rem;color:var(--ink);}
-  .donut-hole .s{font-size:.62rem;color:var(--muted);font-weight:700;}
-  .legend{display:flex;flex-direction:column;gap:8px;}
-  .legend-item{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;}
-  .legend-dot{width:12px;height:12px;border-radius:4px;flex-shrink:0;}
-  .legend-val{color:var(--muted);font-weight:700;margin-left:auto;padding-left:14px;}
-
-  /* BARS */
-  .bar-row{display:grid;grid-template-columns:200px 1fr 70px;align-items:center;gap:12px;margin-bottom:11px;}
+  .panel-row{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .panel-row.thirds{grid-template-columns:1fr 1fr 1fr;}
+ 
+  /* BARS (horizontal) */
+  .bar-row{display:grid;grid-template-columns:180px 1fr 42px;align-items:center;gap:10px;margin-bottom:11px;}
   .bar-row .label{font-size:.82rem;font-weight:800;text-align:right;}
   .bar-track{background:#f4ecf0;border-radius:8px;height:20px;overflow:hidden;}
-  .bar-fill{height:100%;border-radius:8px;animation:grow 1s ease-out;}
-  @keyframes grow{from{width:0;}}
+  .bar-fill{height:100%;border-radius:8px;}
   .bar-val{font-weight:900;font-size:.8rem;}
-
-  /* Diversity checklist */
-  .diversity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-  .div-card{
-    background:#fdf6f8;border-radius:14px;padding:16px;text-align:center;
-    border:2px solid #f4ecf0;
+ 
+  /* BARS (vertical / column chart) for age histogram */
+  .col-chart{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:10px;}
+  .col-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+  .col-bar{width:100%;border-radius:8px 8px 4px 4px;background:var(--blue);position:relative;}
+  .col-val{font-size:.78rem;font-weight:900;margin-bottom:4px;color:var(--ink);}
+  .col-lbl{font-size:.7rem;font-weight:700;color:var(--muted);margin-top:6px;text-align:center;}
+ 
+  /* SPLIT (sexo) */
+  .split{display:flex;height:46px;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .split div{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.95rem;}
+  .split-legend{display:flex;justify-content:space-between;margin-top:10px;font-size:.82rem;font-weight:700;color:var(--muted);}
+  .split-legend span.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+ 
+  /* CHIP GRID (poblaciones diferenciales) */
+  .chip-grid{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:14px;
   }
-  .div-card .icon{font-size:1.5rem;}
-  .div-card .num{font-size:1.5rem;font-weight:900;color:var(--purple);margin-top:4px;}
-  .div-card .lbl{font-size:.74rem;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.25;}
-
-  .footnote{text-align:center;color:var(--muted);font-size:.78rem;font-weight:700;margin-top:10px;}
-
+  .chip{
+    background:linear-gradient(160deg,#fff,#fbf3f6);
+    border:1px solid #f1e2ea;
+    border-radius:16px;padding:16px 10px;text-align:center;
+  }
+  .chip .cicon{font-size:1.4rem;margin-bottom:6px;}
+  .chip .cval{font-size:1.5rem;font-weight:900;color:var(--c);}
+  .chip .clbl{font-size:.7rem;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.25;}
+ 
   .divider{
-    display:flex;justify-content:center;align-items:center;gap:10px;margin:6px 0 26px;
-    color:var(--purple);opacity:.5;font-size:.78rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+    display:flex;justify-content:center;align-items:center;gap:10px;
+    margin:6px 0 26px;color:var(--purple);opacity:.5;font-size:.76rem;
+    font-weight:800;letter-spacing:2px;text-transform:uppercase;
   }
-  .divider:before,.divider:after{content:'';flex:1;height:2px;
-    background:linear-gradient(90deg,transparent,var(--orange),transparent);max-width:160px;}
-
+  .divider:before,.divider:after{
+    content:'';flex:1;height:2px;
+    background:linear-gradient(90deg,transparent,var(--orange),transparent);
+    max-width:140px;
+  }
+ 
+  .macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:34px;}
+  .macro-card{
+    background:#fff;border-radius:18px;padding:20px 18px;
+    box-shadow:0 6px 20px rgba(142,45,110,0.08);border-top:6px solid var(--c);
+  }
+  .macro-card .icon{
+    width:40px;height:40px;border-radius:11px;background:var(--c);
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:10px;
+  }
+  .macro-card .pct{font-size:1.9rem;font-weight:900;color:var(--c);}
+  .macro-card .name{font-weight:800;font-size:.95rem;margin-top:2px;}
+  .macro-card .count{color:var(--muted);font-size:.8rem;font-weight:700;margin-top:2px;}
+  .macro-card .bar-bg{height:7px;background:#f1e7ec;border-radius:6px;margin-top:12px;overflow:hidden;}
+  .macro-card .bar-fill2{height:100%;background:var(--c);border-radius:6px;}
+ 
+  .footnote{text-align:center;color:var(--muted);font-size:.8rem;font-weight:700;margin-top:8px;}
+ 
   @media(max-width:900px){
-    .grid-2{grid-template-columns:1fr;}
-    .stats-strip{grid-template-columns:repeat(2,1fr);}
-    .diversity-grid{grid-template-columns:repeat(2,1fr);}
-  }
-  @media(max-width:600px){
-    .bar-row{grid-template-columns:110px 1fr 40px;}
-    .bar-row .label{font-size:.68rem;}
-    .hero-title{font-size:1.7rem;}
+    .panel-row,.panel-row.thirds{grid-template-columns:1fr;}
+    .kpi-strip{grid-template-columns:repeat(2,1fr);}
+    .chip-grid{grid-template-columns:repeat(2,1fr);}
+    .macro-grid{grid-template-columns:1fr;}
+    .bar-row{grid-template-columns:120px 1fr 36px;}
+    .hero-title{font-size:1.8rem;}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-
+ 
+  <!-- HERO -->
   <div class="hero">
     <div>
       <div class="hero-dots" id="dots"></div>
@@ -143,178 +176,232 @@
       <span class="lbl">Beneficiarios<br>seleccionados</span>
     </div>
   </div>
-
-  <!-- QUICK STATS -->
-  <div class="stats-strip">
-    <div class="stat-pill" style="--c:var(--pink)"><div class="num">53.4%</div><div class="lbl">Son mujeres</div></div>
-    <div class="stat-pill" style="--c:var(--blue)"><div class="num">80.2%</div><div class="lbl">Microempresas</div></div>
-    <div class="stat-pill" style="--c:var(--orange)"><div class="num">61%</div><div class="lbl">En etapa de crecimiento</div></div>
-    <div class="stat-pill" style="--c:var(--green)"><div class="num">45.6</div><div class="lbl">Años, edad promedio</div></div>
-    <div class="stat-pill" style="--c:var(--purple)"><div class="num">83.8%</div><div class="lbl">Con registro mercantil</div></div>
+ 
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi" style="--c:var(--pink)"><div class="kval">53.4%</div><div class="klbl">Son mujeres</div></div>
+    <div class="kpi" style="--c:var(--blue)"><div class="kval">46 años</div><div class="klbl">Edad promedio</div></div>
+    <div class="kpi" style="--c:var(--orange)"><div class="kval">80.2%</div><div class="klbl">Microempresas</div></div>
+    <div class="kpi" style="--c:var(--green)"><div class="kval">83.8%</div><div class="klbl">Con Registro Mercantil</div></div>
+    <div class="kpi" style="--c:var(--purple)"><div class="kval">7</div><div class="klbl">Departamentos alcanzados</div></div>
   </div>
-
-  <!-- SEXO + TIPO PERSONA -->
-  <div class="grid-2">
-    <div class="panel">
-      <div class="section-title"><span class="plus">+</span> Ubicación Geográfica </div>
-      <div class="section-sub">Distribución de los 500 beneficiarios</div>
-      <div class="donut-wrap">
-        <div class="donut" style="background:conic-gradient(var(--blue) 0% 63.2%, var(--green) 63.2% 100%)">
-          <div class="donut-hole"><div class="n">500</div><div class="s">total</div></div>
-        </div>
-        <div class="legend">
-          <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Urbano <span class="legend-val">316 · 63.2%</span></div>
-          <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Rural <span class="legend-val">184 · 36.8%</span></div>
-        </div>
-      </div>
+ 
+  <!-- ACTIVIDAD -->
+  <div class="section-title"><span class="plus">+</span> Grandes grupos de actividad turística</div>
+  <div class="section-sub">Distribución de los beneficiarios según el macro-segmento al que pertenece su actividad económica</div>
+  <div class="macro-grid">
+    <div class="macro-card" style="--c:var(--purple)">
+      <div class="icon">🛎️</div>
+      <div class="pct">49.6%</div>
+      <div class="name">Alojamiento</div>
+      <div class="count">248 beneficiarios</div>
+      <div class="bar-bg"><div class="bar-fill2" style="width:49.6%"></div></div>
     </div>
-
-    <div class="panel">
-      <div class="section-title"><span class="plus">+</span> Tipo de persona</div>
-      <div class="section-sub">Naturaleza jurídica del beneficiario</div>
-      <div class="donut-wrap">
-        <div class="donut" style="background:conic-gradient(var(--purple) 0% 80.2%, var(--yellow) 80.2% 100%)">
-          <div class="donut-hole"><div class="n">500</div><div class="s">total</div></div>
-        </div>
-        <div class="legend">
-          <div class="legend-item"><span class="legend-dot" style="background:var(--purple)"></span>Persona natural <span class="legend-val">401 · 80.2%</span></div>
-          <div class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Persona jurídica <span class="legend-val">99 · 19.8%</span></div>
-        </div>
-      </div>
+    <div class="macro-card" style="--c:var(--blue)">
+      <div class="icon">🧳</div>
+      <div class="pct">35.8%</div>
+      <div class="name">Agencias de viajes</div>
+      <div class="count">179 beneficiarios</div>
+      <div class="bar-bg"><div class="bar-fill2" style="width:35.8%"></div></div>
+    </div>
+    <div class="macro-card" style="--c:var(--orange)">
+      <div class="icon">🎪</div>
+      <div class="pct">14.6%</div>
+      <div class="name">Servicios y experiencias</div>
+      <div class="count">73 beneficiarios</div>
+      <div class="bar-bg"><div class="bar-fill2" style="width:14.6%"></div></div>
     </div>
   </div>
-
-  <!-- EDAD + TAMAÑO EMPRESA -->
-  <div class="grid-2">
+ 
+  <div class="panel">
+    <div class="section-title"><span class="plus">+</span> Ranking de categorías de actividad</div>
+    <div class="section-sub">Número de beneficiarios por categoría, de mayor a menor</div>
+    <div id="ranking"></div>
+  </div>
+ 
+  <div class="divider">Perfil de las personas y unidades productivas</div>
+ 
+  <!-- SEXO + EDAD -->
+  <div class="panel-row">
+    <div class="panel">
+      <div class="section-title"><span class="plus">+</span> Sexo biológico</div>
+      <div class="section-sub">Composición por sexo de los 500 beneficiarios</div>
+      <div class="split">
+        <div style="width:53.4%;background:var(--pink)">Mujer · 53.4%</div>
+        <div style="width:46.6%;background:var(--blue)">Hombre · 46.6%</div>
+      </div>
+      <div class="split-legend">
+        <span><span class="dot" style="background:var(--pink)"></span>267 mujeres</span>
+        <span><span class="dot" style="background:var(--blue)"></span>233 hombres</span>
+      </div>
+ 
+      <div class="section-title" style="margin-top:26px;"><span class="plus">+</span> Tipo de persona</div>
+      <div class="section-sub">Natural vs. jurídica</div>
+      <div class="split">
+        <div style="width:80.2%;background:var(--green)">Natural · 80.2%</div>
+        <div style="width:19.8%;background:var(--purple)">Jurídica · 19.8%</div>
+      </div>
+      <div class="split-legend">
+        <span><span class="dot" style="background:var(--green)"></span>401 personas naturales</span>
+        <span><span class="dot" style="background:var(--purple)"></span>99 personas jurídicas</span>
+      </div>
+    </div>
+ 
     <div class="panel">
       <div class="section-title"><span class="plus">+</span> Rango de edad</div>
-      <div class="section-sub">Edad promedio: 46.4 años</div>
-      <div id="edad"></div>
-    </div>
-    <div class="panel">
-      <div class="section-title"><span class="plus">+</span> Tamaño de empresa</div>
-      <div class="section-sub">Clasificación de la unidad productiva</div>
-      <div id="tamano"></div>
+      <div class="section-sub">Distribución de beneficiarios por grupo etario (años)</div>
+      <div class="col-chart" id="ageChart"></div>
     </div>
   </div>
-
-  <div class="divider">Ubicación y formación</div>
-
-  <!-- DEPARTAMENTO -->
+ 
+  <!-- EMPRESA -->
   <div class="panel">
-    <div class="section-title"><span class="plus">+</span> Departamento de residencia</div>
-    <div class="section-sub">Número de beneficiarios por departamento</div>
-    <div id="depto"></div>
-  </div>
-
-  <div class="grid-2">
-    <div class="panel">
-      <div class="section-title"><span class="plus">+</span> Nivel de escolaridad</div>
-      <div class="section-sub">Máximo nivel educativo alcanzado</div>
-      <div id="escolaridad"></div>
+    <div class="section-title"><span class="plus">+</span> Perfil de la unidad productiva</div>
+    <div class="section-sub">Tamaño de empresa, etapa de madurez y nivel de escolaridad del beneficiario</div>
+    <div class="panel-row thirds">
+      <div>
+        <div class="section-title" style="font-size:1rem;">Tamaño de empresa</div>
+        <div id="tamano"></div>
+      </div>
+      <div>
+        <div class="section-title" style="font-size:1rem;">Etapa de madurez</div>
+        <div id="madurez"></div>
+      </div>
+      <div>
+        <div class="section-title" style="font-size:1rem;">Nivel de escolaridad</div>
+        <div id="escolaridad"></div>
+      </div>
     </div>
-    <div class="panel">
-      <div class="section-title"><span class="plus">+</span> Etapa de madurez</div>
-      <div class="section-sub">Momento del emprendimiento</div>
-      <div id="madurez"></div>
-    </div>
   </div>
-
-  <div class="divider">Formalización</div>
-
+ 
+  <!-- UBICACION -->
   <div class="panel">
-    <div class="section-title"><span class="plus">+</span> Nivel de formalización empresarial</div>
-    <div class="section-sub">Porcentaje de beneficiarios que cuentan con cada requisito</div>
-    <div id="formal"></div>
+    <div class="section-title"><span class="plus">+</span> Ubicación geográfica</div>
+    <div class="section-sub">Departamento de residencia de los beneficiarios seleccionados</div>
+    <div id="departamentos"></div>
   </div>
-
-  <div class="divider">Enfoque diferencial y poblaciones diversas</div>
-
+ 
+  <div class="divider">Poblaciones diferenciales</div>
+ 
+  <!-- POBLACIONES -->
   <div class="panel">
-    <div class="section-title"><span class="plus">+</span> Poblaciones de especial protección</div>
-    <div class="section-sub">Número de beneficiarios que se autoreconocen en cada grupo (no excluyentes entre sí)</div>
-    <div class="diversity-grid">
-      <div class="div-card"><div class="icon">🌎</div><div class="num">57</div><div class="lbl">Pertenecen a un grupo étnico</div></div>
-      <div class="div-card"><div class="icon">🎗️</div><div class="num">83</div><div class="lbl">Población vulnerable</div></div>
-      <div class="div-card"><div class="icon">🕊️</div><div class="num">25</div><div class="lbl">Víctimas del conflicto (RUV)</div></div>
-      <div class="div-card"><div class="icon">👵</div><div class="num">82</div><div class="lbl">Personas adultas mayores (60+)</div></div>
-      <div class="div-card"><div class="icon">🌱</div><div class="num">31</div><div class="lbl">Jóvenes (14 a 28 años)</div></div>
-      <div class="div-card"><div class="icon">♿</div><div class="num">14</div><div class="lbl">Con alguna condición de discapacidad</div></div>
-      <div class="div-card"><div class="icon">🏳️‍🌈</div><div class="num">9</div><div class="lbl">Sectores sociales LGBTIQ+</div></div>
-      <div class="div-card"><div class="icon">✈️</div><div class="num">5</div><div class="lbl">Personas migrantes</div></div>
-      <div class="div-card"><div class="icon">🤝</div><div class="num">96</div><div class="lbl">Realizan trabajo de cuidado</div></div>
+    <div class="section-sub" style="margin-top:-4px;">Porcentaje de los 500 beneficiarios que se identifican en cada categoría (no excluyentes entre sí)</div>
+    <div class="chip-grid">
+      <div class="chip" style="--c:var(--pink)"><div class="cicon">🤱</div><div class="cval">36.4%</div><div class="clbl">Trabajos de cuidado</div></div>
+      <div class="chip" style="--c:var(--orange)"><div class="cicon">🧓</div><div class="cval">16.4%</div><div class="clbl">Adultos mayores (60+)</div></div>
+      <div class="chip" style="--c:var(--purple)"><div class="cicon">🤝</div><div class="cval">16.6%</div><div class="clbl">Población vulnerable</div></div>
+      <div class="chip" style="--c:var(--green)"><div class="cicon">🌿</div><div class="cval">11.4%</div><div class="clbl">Grupos étnicos</div></div>
+      <div class="chip" style="--c:var(--blue)"><div class="cicon">🎓</div><div class="cval">6.2%</div><div class="clbl">Jóvenes (14–28)</div></div>
+      <div class="chip" style="--c:var(--purple)"><div class="cicon">🏠</div><div class="cval">5.0%</div><div class="clbl">Víctimas RUV</div></div>
+      <div class="chip" style="--c:var(--orange)"><div class="cicon">♿</div><div class="cval">2.8%</div><div class="clbl">Condición de discapacidad</div></div>
+      <div class="chip" style="--c:var(--pink)"><div class="cicon">🏳️‍🌈</div><div class="cval">1.8%</div><div class="clbl">Sectores LGBTIQ+</div></div>
+      <div class="chip" style="--c:var(--blue)"><div class="cicon">🎖️</div><div class="cval">1.2%</div><div class="clbl">Veteranos F.P.</div></div>
+      <div class="chip" style="--c:var(--green)"><div class="cicon">🌍</div><div class="cval">1.0%</div><div class="clbl">Personas migrantes</div></div>
     </div>
-    <div class="footnote">Fuente: Base de beneficiarios seleccionados · Turismo +PRO · n = 500</div>
   </div>
-
+ 
+  <div class="footnote">Fuente: Base de beneficiarios seleccionados Turismo +PRO · n = 500</div>
+ 
 </div>
-
+ 
 <script>
-const colorSeq = ['var(--blue)','var(--purple)','var(--orange)','var(--yellow)','var(--green)','var(--pink)','#B98FA6'];
-
-function renderBars(containerId, data, labelWidth){
-  const max = Math.max(...data.map(d=>d.val));
+const colorVar = {
+  blue:"var(--blue)", purple:"var(--purple)", orange:"var(--orange)",
+  yellow:"var(--yellow)", green:"var(--green)", pink:"var(--pink)"
+};
+ 
+function renderBars(containerId, data, opts={}){
   const el = document.getElementById(containerId);
-  data.forEach((d,i)=>{
+  const max = Math.max(...data.map(d=>d.val));
+  data.forEach(d=>{
     const pct = (d.val/max*100).toFixed(1);
     const row = document.createElement('div');
     row.className='bar-row';
     row.innerHTML = `
       <div class="label">${d.name}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.color||colorSeq[i%colorSeq.length]}"></div></div>
-      <div class="bar-val">${d.val}${d.suffix||''}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${colorVar[d.c]||d.c}"></div></div>
+      <div class="bar-val">${d.val}</div>
     `;
     el.appendChild(row);
   });
 }
-
-renderBars('edad', [
-  {name:'46 – 60 años', val:170, suffix:''},
-  {name:'36 – 45 años', val:146},
-  {name:'29 – 35 años', val:86},
-  {name:'60+ años', val:73},
-  {name:'18 – 28 años', val:25},
+ 
+// Ranking de categorías
+renderBars('ranking', [
+  {name:"Agencias de viajes", val:179, c:"blue"},
+  {name:"Alojamiento rural", val:93, c:"purple"},
+  {name:"Alojamiento en hoteles", val:87, c:"purple"},
+  {name:"Otros alojamientos para visitantes", val:51, c:"purple"},
+  {name:"Guías profesionales de turismo", val:40, c:"orange"},
+  {name:"Alojamiento en apartahoteles", val:15, c:"purple"},
+  {name:"Gastronomía y restaurantes", val:12, c:"orange"},
+  {name:"Operadores de parques temáticos", val:8, c:"orange"},
+  {name:"Convenciones y eventos", val:7, c:"orange"},
+  {name:"Transporte turístico de pasajeros", val:6, c:"orange"},
+  {name:"Alojamiento en centros vacacionales", val:2, c:"purple"},
 ]);
-
+ 
+// Tamaño empresa
 renderBars('tamano', [
-  {name:'Microempresa', val:401},
-  {name:'Pequeña empresa', val:91},
-  {name:'Mediana empresa', val:8},
+  {name:"Micro", val:401, c:"green"},
+  {name:"Pequeña", val:91, c:"blue"},
+  {name:"Mediana", val:8, c:"purple"},
 ]);
-
-renderBars('depto', [
-  {name:'Santander', val:150},
-  {name:'Boyacá', val:111},
-  {name:'Chocó', val:61},
-  {name:'Norte de Santander', val:61},
-  {name:'Cauca', val:60},
-  {name:'Arauca', val:33},
-  {name:'Arch. San Andrés', val:24},
-]);
-
-renderBars('escolaridad', [
-  {name:'Profesional', val:172},
-  {name:'Tecnólogo', val:93},
-  {name:'Bachillerato', val:72},
-  {name:'Técnico', val:70},
-  {name:'Posgrado', val:64},
-  {name:'Primaria', val:22},
-  {name:'Ninguno', val:7},
-]);
-
+ 
+// Etapa de madurez
 renderBars('madurez', [
-  {name:'Crecimiento', val:305},
-  {name:'Temprana', val:148},
-  {name:'Validación', val:34},
-  {name:'Expansión', val:13},
+  {name:"Crecimiento", val:305, c:"orange"},
+  {name:"Temprana", val:148, c:"blue"},
+  {name:"Validación", val:34, c:"purple"},
+  {name:"Expansión", val:13, c:"green"},
 ]);
-
-renderBars('formal', [
-  {name:'Tienen RUT', val:496, suffix:' (99.2%)'},
-  {name:'Registro Mercantil', val:419, suffix:' (83.8%)'},
-  {name:'Página web', val:138, suffix:' (27.6%)'},
+ 
+// Escolaridad
+renderBars('escolaridad', [
+  {name:"Profesional", val:172, c:"purple"},
+  {name:"Tecnólogo", val:93, c:"blue"},
+  {name:"Bachillerato", val:72, c:"orange"},
+  {name:"Técnico", val:70, c:"green"},
+  {name:"Posgrado", val:64, c:"pink"},
+  {name:"Primaria", val:22, c:"yellow"},
+  {name:"Ninguno", val:7, c:"#c9bcc6"},
 ]);
-
+ 
+// Departamentos
+renderBars('departamentos', [
+  {name:"Santander", val:150, c:"blue"},
+  {name:"Boyacá", val:111, c:"purple"},
+  {name:"Chocó", val:61, c:"orange"},
+  {name:"Norte de Santander", val:61, c:"green"},
+  {name:"Cauca", val:60, c:"pink"},
+  {name:"Arauca", val:33, c:"yellow"},
+  {name:"Archipiélago de San Andrés", val:24, c:"blue"},
+]);
+ 
+// Age histogram (column chart)
+const ageData = [
+  {lbl:"18–27", val:17},
+  {lbl:"28–34", val:77},
+  {lbl:"35–44", val:146},
+  {lbl:"45–54", val:131},
+  {lbl:"55–64", val:91},
+  {lbl:"65+", val:38},
+];
+const ageMax = Math.max(...ageData.map(d=>d.val));
+const ageEl = document.getElementById('ageChart');
+const ageColors = ["#8DC63F","#3B7BC4","#8E2D6E","#8E2D6E","#F0913B","#E0518C"];
+ageData.forEach((d,i)=>{
+  const h = (d.val/ageMax*100).toFixed(1);
+  const item = document.createElement('div');
+  item.className='col-item';
+  item.innerHTML = `
+    <div class="col-val">${d.val}</div>
+    <div class="col-bar" style="height:${h}%;background:${ageColors[i]}"></div>
+    <div class="col-lbl">${d.lbl}</div>
+  `;
+  ageEl.appendChild(item);
+});
+ 
 // decorative dots like the logo
 const dotsEl = document.getElementById('dots');
 const dotColors = ['#F0913B','#F0913B','#F4D23A','#E0518C','#F0913B','#8DC63F'];
@@ -330,3 +417,6 @@ sizes.forEach((s,i)=>{
 </script>
 </body>
 </html>
+ 
+
+
